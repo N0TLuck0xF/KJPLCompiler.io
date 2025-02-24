@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KJPL Compiler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        textarea, pre {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>KJPL Compiler</h1>
+    <textarea id="inputCode" placeholder="Enter your KJPL code here..."></textarea>
+    <button onclick="compileCode()">Compile</button>
+    <h2>Generated C Code:</h2>
+    <pre id="outputCode"></pre>
+
+    <script>
+        async function compileCode() {
+            const inputCode = document.getElementById("inputCode").value;
+            const outputCode = document.getElementById("outputCode");
+
+            try {
+                const response = await fetch("https://your-backend-server.com/compile", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ code: inputCode }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Compilation failed");
+                }
+
+                const result = await response.json();
+                outputCode.textContent = result.c_code || result.error;
+            } catch (error) {
+                outputCode.textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
